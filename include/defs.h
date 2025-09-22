@@ -1,15 +1,16 @@
-// #include "types.h"
-
-// printf.c
-// int             printf(char*, ...) __attribute__ ((format (printf, 1, 2)));
-// void            panic(char*) __attribute__((noreturn));
-// void            printfinit(void);
+#include "types.h"
 
 // uart.c
-void            uartinit(void);
-void            uartintr(void);
-void            uartwrite(char [], int);
-void            uartputc_sync(int);
+void            uart_init(uint32 baud_rate);
 void            uart_putc(char);
 void            uart_puts(const char *);
-int             uartgetc(void);
+
+// console.c
+void            consoleclear(void);
+void            consputc(int);
+
+// printf.c
+int             printf(const char* fmt, ...);
+void            test_printf_basic();
+void            test_printf_edge_cases();
+

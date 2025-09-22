@@ -1,4 +1,3 @@
-#include <stdint.h>
 #include "defs.h"
 #include "types.h"
 
@@ -13,15 +12,15 @@
 #define UART_DLM (UART_BASE + 0x1)  // 波特率高字节
 
 
-static inline void mmio_write(uintptr_t addr, uint8_t val) {
-    *(volatile uint8_t *)addr = val;
+static inline void mmio_write(unsigned long addr, uint8 val) {
+    *(volatile uint8 *)addr = val;
 }
 
-static inline uint8_t mmio_read(uintptr_t addr) {
-    return *(volatile uint8_t *)addr;
+static inline uint8 mmio_read(unsigned long addr) {
+    return *(volatile uint8 *)addr;
 }
 
-void uart_init(uint32_t baud_rate) {
+void uart_init(uint32 baud_rate) {
     // 1. 禁用中断（IER）
     mmio_write(UART_IER, 0x00);
     
@@ -33,7 +32,7 @@ void uart_init(uint32_t baud_rate) {
     
     // 4. 设置波特率（需先设置 LCR 的 DLAB 位）
     mmio_write(UART_LCR, mmio_read(UART_LCR) | 0x80);  // 启用 DLAB
-    uint32_t divisor = 115200 / baud_rate;
+    uint32 divisor = 115200 / baud_rate;
     mmio_write(UART_DLL, divisor & 0xFF);      // 低字节
     mmio_write(UART_DLM, (divisor >> 8) & 0xFF); // 高字节
     mmio_write(UART_LCR, mmio_read(UART_LCR) & ~0x80); // 关闭 DLAB
