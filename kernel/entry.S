@@ -4,17 +4,22 @@ _start:
     # UART 基地址
     li t0, 0x10000000
 
-    # 输出 'S' 表示启动
-    # li t1, 'S'
-    # sb t1, 0(t0)
-
     # 设置栈指针
     la sp, stack_top
 
-    # 输出 'P' 表示栈设置完成
-    # li t1, 'P'
-    # sb t1, 0(t0)
+    # 清零 BSS 段
+    la t1, edata      # BSS 起始地址
+    la t2, end        # BSS 结束地址
+    li t3, 0          # 清零用
 
+1:
+    bge t1, t2, 2f    # 如果 t1 >= t2，跳出循环
+    sb t3, 0(t1)      # *(t1) = 0
+    addi t1, t1, 1    # t1++
+    j 1b
+2:
+
+    call uart_init
     # 跳转到 C 主函数
     call main
 
