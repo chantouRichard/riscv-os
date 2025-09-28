@@ -1,23 +1,30 @@
-K=kernel
-B=build
+K = kernel
+B = build
 
 CROSS = riscv64-unknown-elf-
 CC = $(CROSS)gcc
 LD = $(CROSS)ld
 OBJCOPY = $(CROSS)objcopy
 
-CFLAGS = -Wall -O2 -nostdlib -march=rv64g -mabi=lp64 -Iinclude -mcmodel=medany -fno-builtin-printf -fno-builtin-putc
-CFLAGS += -fno-common -nostdlib
-CFLAGS += -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset
-CFLAGS += -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero
-CFLAGS += -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc
-CFLAGS += -fno-builtin-free
-CFLAGS += -fno-builtin-memcpy -Wno-main
-CFLAGS += -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf
+CFLAGS = -Wall -O2 -nostdlib -march=rv64g -mabi=lp64 -Iinclude -mcmodel=medany
+CFLAGS += -fno-builtin-printf -fno-builtin-putc -fno-common -Wno-main
+CFLAGS += -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen
+CFLAGS += -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp
+CFLAGS += -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr
+CFLAGS += -fno-builtin-exit -fno-builtin-malloc -fno-builtin-free
+CFLAGS += -fno-builtin-fprintf -fno-builtin-vprintf
 
-LDFLAGS = -T $K/kernel.ld
+LDFLAGS = -T $(K)/kernel.ld
 
-OBJS = $(B)/entry.o $(B)/main.o $(B)/uart.o $(B)/console.o $(B)/printf.o
+# 查找 kernel 下所有 C 文件
+SRC = $(shell find $(K) -name "*.c")
+# 把对应的 .o 文件放在 build/ 下
+OBJS = $(patsubst $(K)/%.c,$(B)/%.o,$(SRC))
+OBJS := $(OBJS:.c=.o)
+
+# 查找所有 .S 文件
+ASM_SRC = $(shell find $(K) -name "*.S")
+ASM_OBJS = $(patsubst $(K)/%.S,$(B)/%.o,$(ASM_SRC))
 
 # 默认目标
 all: $(B)/kernel.elf $(B)/kernel.bin
@@ -26,32 +33,26 @@ all: $(B)/kernel.elf $(B)/kernel.bin
 $(B):
 	mkdir -p $(B)
 
-# 编译各个目标文件到 build 目录
-$(B)/entry.o: $K/entry.S | $(B)
-	$(CC) $(CFLAGS) -c $K/entry.S -o $@
+# 规则：编译 C 文件
+$(B)/%.o: $(K)/%.c | $(B)
+	mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-$(B)/main.o: $K/main.c | $(B)
-	$(CC) $(CFLAGS) -c $K/main.c -o $@
+# 规则：编译汇编文件
+$(B)/%.o: $(K)/%.S | $(B)
+	mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-$(B)/uart.o: $K/uart.c | $(B)
-	$(CC) $(CFLAGS) -c $K/uart.c -o $@
+# 链接生成 elf
+$(B)/kernel.elf: $(OBJS) $(ASM_OBJS) $(K)/kernel.ld | $(B)
+	$(LD) $(LDFLAGS) -o $@ $(ASM_OBJS) $(OBJS)
 
-$(B)/console.o: $K/console.c | $(B)
-	$(CC) $(CFLAGS) -c $K/console.c -o $@
-
-$(B)/printf.o: $K/printf.c | $(B)
-	$(CC) $(CFLAGS) -c $K/printf.c -o $@
-
-# 链接生成 elf 文件
-$(B)/kernel.elf: $(OBJS) $K/kernel.ld | $(B)
-	$(LD) $(LDFLAGS) -o $@ $(OBJS)
-
-# 生成 bin 文件
+# 生成 bin
 $(B)/kernel.bin: $(B)/kernel.elf | $(B)
 	$(OBJCOPY) -O binary $< $@
 
 # 清理
 clean:
-	rm -rf $(B)/*.o $(B)/kernel.elf $(B)/kernel.bin
+	rm -rf $(B)
 
 .PHONY: all clean

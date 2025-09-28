@@ -104,13 +104,17 @@ int printf(const char *fmt, ...)
 
     return 0;
 }
+void panic(const char *msg) {
+    printf("PANIC: %s\n", msg);
+    for (;;); // 死循环停机
+}
 
 void test_printf_basic()
 {
     printf("Testing integer: %d\n", 42);
     printf("Testing negative: %d\n", -123);
     printf("Testing zero: %d\n", 0);
-    printf("Testing hex: 0x%x\n", 0xABC);
+    printf("Testing hex: 0x%x\n", 10);
     printf("Testing string: %s\n", "Hello");
     printf("Testing char: %c\n", 'X');
     printf("Testing percent: %%\n");

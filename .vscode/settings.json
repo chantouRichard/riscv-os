@@ -1,6 +1,28 @@
 {
     "files.associations": {
         "types.h": "c",
-        "defs.h": "c"
+        "defs.h": "c",
+        "cstring": "c",
+        "cassert": "c",
+        "riscv.h": "c",
+        "array": "c",
+        "chrono": "c",
+        "cmath": "c",
+        "condition_variable": "c",
+        "deque": "c",
+        "string": "c",
+        "unordered_map": "c",
+        "vector": "c",
+        "exception": "c",
+        "functional": "c",
+        "string_view": "c",
+        "memory": "c",
+        "random": "c",
+        "initializer_list": "c",
+        "numeric": "c",
+        "ostream": "c",
+        "ranges": "c",
+        "streambuf": "c",
+        "system_error": "c"
     }
 }
