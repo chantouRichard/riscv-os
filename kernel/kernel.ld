@@ -7,16 +7,20 @@ SECTIONS
 
   .text : {
     *(.text .text.*)
-    PROVIDE(etext = .);
+    PROVIDE(text_start = .);
+    PROVIDE(text_end = .);
   }
 
   .rodata : {
     *(.rodata .rodata.*)
+    PROVIDE(rodata_start = .);
+    PROVIDE(rodata_end = .);
   }
 
   .data : {
     *(.data .data.*)
-    PROVIDE(edata = .);
+    PROVIDE(data_start = .);
+    PROVIDE(data_end = .);
   }
 
   .bss : {

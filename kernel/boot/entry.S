@@ -8,7 +8,7 @@ _start:
     la sp, stack_top
 
     # 清零 BSS 段
-    la t1, edata      # BSS 起始地址
+    la t1, data_end      # BSS 起始地址
     la t2, end        # BSS 结束地址
     li t3, 0          # 清零用
 
@@ -21,7 +21,7 @@ _start:
 
     call uart_init
     # 跳转到 C 主函数
-    call main
+    call start
 
 spin:
     j spin

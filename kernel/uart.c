@@ -1,5 +1,6 @@
-#include "defs.h"
 #include "types.h"
+#include "riscv.h"
+#include "defs.h"
 
 #define UART_BASE 0x10000000UL
 #define UART_THR (UART_BASE + 0x0)   // 发送寄存器

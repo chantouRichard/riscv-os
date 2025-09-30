@@ -1,4 +1,6 @@
 // kernel/console.c
+#include "types.h"
+#include "riscv.h"
 #include "defs.h"
 
 // 外部函数声明（来自 uart.c）

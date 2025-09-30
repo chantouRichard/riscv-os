@@ -6,7 +6,7 @@ CC = $(CROSS)gcc
 LD = $(CROSS)ld
 OBJCOPY = $(CROSS)objcopy
 
-CFLAGS = -Wall -O2 -nostdlib -march=rv64g -mabi=lp64 -Iinclude -mcmodel=medany
+CFLAGS = -Wall -O0 -nostdlib -march=rv64g -mabi=lp64 -Iinclude -mcmodel=medany -g
 CFLAGS += -fno-builtin-printf -fno-builtin-putc -fno-common -Wno-main
 CFLAGS += -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen
 CFLAGS += -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp

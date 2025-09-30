@@ -23,6 +23,8 @@
         "ostream": "c",
         "ranges": "c",
         "streambuf": "c",
-        "system_error": "c"
+        "system_error": "c",
+        "stdarg.h": "c",
+        "memlayout.h": "c"
     }
 }

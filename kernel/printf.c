@@ -1,4 +1,6 @@
 // kernel/printf.c
+#include "types.h"
+#include "riscv.h"
 #include "defs.h"
 #include <stdarg.h>
 

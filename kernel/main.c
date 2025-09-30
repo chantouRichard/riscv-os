@@ -1,3 +1,5 @@
+#include "types.h"
+#include "riscv.h"
 #include "defs.h"
 
 void main() {
@@ -18,12 +20,25 @@ void main() {
     // printf("Screen cleared!\n");
 
     // ==== 实验三：内存分配器 ====
-    printf("\n\n实验三：\n");
-    kinit();
+    // printf("\n\n实验三：\n");
+    // kinit();
+    
     // printf("测试一\n");
     // test_physical_memory();
-    printf("测试二\n");
-    test_pagetable();
+
+    // printf("测试二\n");
+    // test_pagetable();
+
+    // printf("测试三\n");
+    // test_virtual_memory();
     
+    // ==== 实验四：时钟中断 ====
+    printf("\n\n实验四：\n");
+    printf("\n测试一\n");
+    test_timer_interrupt();
+    printf("\n\n测试二\n");
+    test_exception_handling();
+    printf("\n\n测试三\n");
+    test_interrupt_overhead();
     while (1) {}
 }
